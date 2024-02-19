@@ -46,7 +46,7 @@ char *
 t_getline_next (T_GETLINE *g, u_char flags) {
 
   int dos = 0;
-  char c;
+  int c;  /* this is an int so comparison to EOF will work consistently */
   char *ptr;
   size_t white;
   char *buffer;
