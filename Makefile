@@ -1,32 +1,41 @@
-IFLAGS = -I inc -I /Users/bob/inc
-CFLAGS = -g -Werror -Wall -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes -Wunused -Wno-deprecated-declarations -I /Users/bob/inc/c_collection
-LFLAGS = /Users/bob/lib/c_collection.a
+SRC := src
+INC := inc
+SHARED_LIB := $(HOME)/lib
+SHARED_INC := $(HOME)/inc
+SHARED_BIN := $(HOME)/bin
+TEST := test
+OBJ := obj
 
-c_tools.a: obj/t_getline.o
-	$(AR) ru c_tools.a obj/t_getline.o
+IFLAGS := -I $(INC) -I $(SHARED_INC)
+CFLAGS := -g -Werror -Wall -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes -Wunused -Wno-deprecated-declarations
+LFLAGS := $(SHARED_LIB)/c_collection.a
+
+c_tools.a: $(OBJ)/t_getline.o
+	$(AR) ru c_tools.a $(OBJ)/t_getline.o
 	ranlib c_tools.a
 
-obj/t_getline.o: src/t_getline.c inc/t_getline.h \
-  /Users/bob/inc/c_collection/c_buffer.h
+$(OBJ)/t_getline.o: $(SRC)/t_getline.c $(INC)/t_getline.h \
+  $(SHARED_INC)/c_collection/c_buffer.h
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
-obj/test_t_getline.o: test/test_t_getline.c inc/t_getline.h
+$(OBJ)/test_t_getline.o: $(TEST)/test_t_getline.c $(INC)/t_getline.h
+
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
-clean: 
-	-rm -f c_tools.a
-	-rm -f obj/t_getline.o
-	-rm -f obj/test_t_getline.o
-	-rm -f test_t_getline
+test_t_getline: $(OBJ)/test_t_getline.o c_tools.a
+	gcc $(OBJ)/test_t_getline.o c_tools.a $(LFLAGS) -o $@
 
 test: test_t_getline c_tools.a
 	./test_t_getline
 	rm test_t_getline
 
-test_t_getline: obj/test_t_getline.o c_tools.a
-	gcc obj/test_t_getline.o c_tools.a $(LFLAGS) -o $@
+install: c_tools.a
+	-mkdir $(SHARED_LIB) 2>/dev/null || true
+	-cp c_tools.a $(SHARED_LIB)/
+	-mkdir $(SHARED_INC) 2>/dev/null || true
+	-cp $(INC)/t_getline.h $(SHARED_INC)/
 
-install: c_tools.a 
-	-cp c_tools.a $(HOME)/lib/
-	-mkdir $(HOME)/inc/c_tools
-	-cp inc/t_getline.h $(HOME)/inc/c_tools/
+clean:
+	-rm -f c_tools.a
+	-rm -f $(OBJ)/t_getline.o
+	-rm -f test_t_getline.o
