@@ -1,10 +1,10 @@
 SRC := src
 INC := inc
+TEST := test
+OBJ := obj
 SHARED_LIB := $(HOME)/lib
 SHARED_INC := $(HOME)/inc
 SHARED_BIN := $(HOME)/bin
-TEST := test
-OBJ := obj
 
 IFLAGS := -I $(INC) -I $(SHARED_INC)
 CFLAGS := -g -Werror -Wall -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes -Wunused -Wno-deprecated-declarations
@@ -14,11 +14,11 @@ c_tools.a: $(OBJ)/t_getline.o
 	$(AR) ru c_tools.a $(OBJ)/t_getline.o
 	ranlib c_tools.a
 
-$(OBJ)/t_getline.o: $(SRC)/t_getline.c $(INC)/t_getline.h \
+$(OBJ)/t_getline.o: $(SRC)/t_getline.c $(SHARED_INC)/t_getline.h \
   $(SHARED_INC)/c_collection/c_buffer.h
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
-$(OBJ)/test_t_getline.o: $(TEST)/test_t_getline.c $(INC)/t_getline.h
+$(OBJ)/test_t_getline.o: $(TEST)/test_t_getline.c $(SHARED_INC)/t_getline.h
 
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
@@ -38,4 +38,5 @@ install: c_tools.a
 clean:
 	-rm -f c_tools.a
 	-rm -f $(OBJ)/t_getline.o
-	-rm -f test_t_getline.o
+	-rm -f $(OBJ)/test_t_getline.o
+	-rm -f test_t_getline
