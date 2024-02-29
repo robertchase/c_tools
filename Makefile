@@ -30,9 +30,9 @@ test: test_t_getline c_tools.a
 	rm test_t_getline
 
 install: c_tools.a
-	-mkdir $(SHARED_LIB) 2>/dev/null || true
+	-mkdir -p $(SHARED_LIB)
 	-cp c_tools.a $(SHARED_LIB)/
-	-mkdir $(SHARED_INC) 2>/dev/null || true
+	-mkdir -p $(SHARED_INC)
 	-cp $(INC)/t_getline.h $(SHARED_INC)/
 
 clean:
