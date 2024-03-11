@@ -8,6 +8,7 @@ int main (int argc, char **argv) {
 
   T_TOKENIZER *t = t_tokenizer_create (' ', '\\', 0);
   assert (t);
+  assert (NULL == t_tokenizer_get(t, 0));
 
   char line[] = "a b c";
   t_tokenizer_parse(t, line);
@@ -15,6 +16,7 @@ int main (int argc, char **argv) {
   assert (0 == strcmp ("a", t_tokenizer_get (t, 0)));
   assert (0 == strcmp ("b", t_tokenizer_get (t, 1)));
   assert (0 == strcmp ("c", t_tokenizer_get (t, 2)));
+  assert (NULL == t_tokenizer_get(t, 4));
 
   char line_extra[] = "     a    b  c    ";
   t_tokenizer_parse(t, line_extra);

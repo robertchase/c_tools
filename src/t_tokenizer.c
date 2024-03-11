@@ -88,5 +88,10 @@ t_tokenizer_count (T_TOKENIZER *t) {
 
 char *
 t_tokenizer_get (T_TOKENIZER *t, int index) {
-    return * (char **) c_array_get (t -> tokens, index);
+    char *result = NULL;
+    void *token = c_array_get (t -> tokens, index);
+    if (token != NULL) {
+        result = * (char **) token;
+    }
+    return result;
 }
